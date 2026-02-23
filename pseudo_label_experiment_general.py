@@ -259,7 +259,7 @@ class KGLM_covariate_shift:
 
 
 
-# run experiments in Section 5.2
+# run experiments in Section 6.1
 
 def run_experiment(n_list, seed_list, family, fcn, kernel, **kwargs):
     # idx: 1 to 100
@@ -273,7 +273,6 @@ def run_experiment(n_list, seed_list, family, fcn, kernel, **kwargs):
 
     res = np.zeros((len(n_list), len(seed_list), 3))
     for (j, n) in enumerate(n_list):
-        #B = n ** (1/3) + np.log(n)
         B = n ** (0.4)
         n_0 = n
         for (k, seed) in enumerate(seed_list):
