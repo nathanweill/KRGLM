@@ -17,4 +17,4 @@ As the full experiment can take some time to run, we provided the final results 
 The results can be plotted using plot_curves_synthetic.ipynb. We included the final output graphs in logistic_errors_04.pdf and logistic_errors_045.pdf respectively.
 
 ## Real experiment on the Raisin dataset from Section 6.2
-The notebook final_exp_raisin.ipynb contains everything to reproduce the results presented in Section 6.3. It is self-contained.
+The notebook final_exp_raisin.ipynb contains everything to reproduce the results presented in Section 6.3.
