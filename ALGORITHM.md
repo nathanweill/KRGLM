@@ -12,11 +12,11 @@ $$W_i \;=\; \frac{\left(\frac{d\mu_i}{d\eta_i}\right)^2}{V_i}, \qquad z_i \;=\; 
 
 Then the next iterate $f_{\text{new}}$ is obtained by solving the weighted kernel ridge regression problem:
 
-$$\min_{\tilde f\in\mathcal H} \frac{1}{2n}\sum_{i=1}^n W_i \bigl(z_i - \tilde f(x_i)\bigr)^2 +\frac{\lambda}{2}\||\tilde f\||_{\mathcal H}^2.$$
+$$\min_{\tilde f\in\mathcal H} \frac{1}{2n}\sum_{i=1}^n W_i \bigl(z_i - \tilde f(x_i)\bigr)^2 +\frac{\lambda}{2}\lVert\tilde f\rVert_{\mathcal H}^2.$$
 
 (Implementation details: we clip $\eta$ before exponentials/logits and clip $W_i$ away from $0$ to avoid overflow/underflow and division by very small numbers.)
 
-Expressing the RKHS norm through coefficients gives $\||\tilde f\||_{\mathcal H}^2=\alpha^\top K\alpha$ with $\tilde f = K\alpha$ on the training set. Eliminating $\alpha$ yields the normal equation in $f$-space:
+Expressing the RKHS norm through coefficients gives $\lVert\tilde f\rVert_{\mathcal H}^2=\alpha^\top K\alpha$ with $\tilde f = K\alpha$ on the training set. Eliminating $\alpha$ yields the normal equation in $f$-space:
 
 $$W(z-f) = n\lambda K^{-1}f \quad\Longleftrightarrow\quad (KW + n\lambda I)f = K W z,$$
 
@@ -34,4 +34,8 @@ In our GitHub repository, we propose two implementations of this IRLS-CG algorit
 
 #### Scalable KeOps/PyTorch-GPU Implementation
 
-Concretely, the KeOps backend represents pairwise kernel interactions symbolically via `pykeops.torch.LazyTensor` and evaluates contractions such as $$(\mathbf{K} v)_i=\sum_{j=1}^n K(x_i,x_j)\,v_j$$ without ever materializing $\mathbf{K}$ as an $n\times n$ tensor. All arrays are moved to `torch.float32` on the chosen device (typically CUDA), and the GLM-specific pieces (pseudo-response/weights and stable sigmoid/softplus) are computed directly in PyTorch. The IRLS system is solved by conjugate gradients using only applications of the SPD operator $A(v)=s\odot \mathbf{K}(s\odot v)+n\lambda v$, implemented as a callable `A_mv` that composes elementwise scaling with the KeOps matvec `Kmv` (again avoiding any dense matrix formation). For prediction, we similarly compute $\mathbf{K}(\mathbf{X}_{\mathrm{new}},\mathbf{X})\boldsymbol{\alpha}$ in GPU-friendly blocks whose size is chosen from available VRAM (via `torch.cuda.mem_get_info`) to prevent memory overflows. Overall, this keeps the *same update equations* as the dense implementation but changes memory usage from $\mathcal{O}(n^2)$ to roughly $\mathcal{O}(nd)$ ($d$ being the input dimension) plus a small constant number of vectors, while each CG iteration costs one (or a few) GPU kernel-matvec reductions rather than dense linear algebra.
+Concretely, the KeOps backend represents pairwise kernel interactions symbolically via `pykeops.torch.LazyTensor` and evaluates contractions such as 
+
+$$(\mathbf{K} v)_i=\sum_{j=1}^n K(x_i,x_j)\,v_j$$
+
+without ever materializing $\mathbf{K}$ as an $n\times n$ tensor. All arrays are moved to `torch.float32` on the chosen device (typically CUDA), and the GLM-specific pieces (pseudo-response/weights and stable sigmoid/softplus) are computed directly in PyTorch. The IRLS system is solved by conjugate gradients using only applications of the SPD operator $A(v)=s\odot \mathbf{K}(s\odot v)+n\lambda v$, implemented as a callable `A_mv` that composes elementwise scaling with the KeOps matvec `Kmv` (again avoiding any dense matrix formation). For prediction, we similarly compute $\mathbf{K}(\mathbf{X}_{\mathrm{new}},\mathbf{X})\boldsymbol{\alpha}$ in GPU-friendly blocks whose size is chosen from available VRAM (via `torch.cuda.mem_get_info`) to prevent memory overflows. Overall, this keeps the *same update equations* as the dense implementation but changes memory usage from $\mathcal{O}(n^2)$ to roughly $\mathcal{O}(nd)$ ($d$ being the input dimension) plus a small constant number of vectors, while each CG iteration costs one (or a few) GPU kernel-matvec reductions rather than dense linear algebra.
