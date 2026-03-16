@@ -9,19 +9,6 @@ from dataclasses import dataclass
 
 # ===================== Kernels =====================
 
-"""def kernel_linear(X, Y, **kw):
-    X = np.asarray(X)
-    if X.ndim == 1:  # allow a single sample vector
-        X = X[None, :]
-    if Y is None:
-        Y = X
-    else:
-        Y = np.asarray(Y)
-        if Y.ndim == 1:
-            Y = Y[None, :]
-    return X @ Y.T"""
-
-
 def kernel_linear(X, Y=None):
     X = np.asarray(X)
     Y = X if Y is None else np.asarray(Y)
