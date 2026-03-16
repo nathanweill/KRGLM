@@ -108,7 +108,7 @@ class KGLM_covariate_shift:
         
     
     
-    def fit(self, rho = 0.5, beta = 2): # KRR under covariate shift
+    def fit(self, rho = 0.5, beta = 2, lbd_min = None, lbd_max = None, lbd_tilde = None): # KRGLM under covariate shift
         assert beta > 1
         assert 0 < rho and rho < 1
         
@@ -119,8 +119,9 @@ class KGLM_covariate_shift:
         self.X_2, self.y_2, self.mean_2 = self.X[self.n_1:self.n], self.y[self.n_1:self.n], self.mean[self.n_1:self.n]    
         
         # penalty parameters: one for imputation, a geometric sequence for training
-        lbd_tilde = 0.1 / self.n # for the imputation model *np.log(self.n)?
-        lbd_min, lbd_max = 0.1 / self.n, 1 # min and max for training
+        lbd_min = lbd_min if lbd_min is not None else 0.1 / self.n # min for training
+        lbd_tilde = lbd_tilde if lbd_tilde is not None else lbd_min_val  # imputation model; default: lbd_min (undersmoothed)
+        lbd_max = lbd_max if lbd_max is not None else 1.0 # max for training
         m = np.log(lbd_max / lbd_min) / np.log(beta)
         m = max( int(np.ceil(m)) , 2 ) + 1
         self.Lambda = lbd_min * ( beta ** np.array( range(m) ) ) # for training
