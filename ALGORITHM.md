@@ -1,6 +1,6 @@
 ### Algorithmic Details and Implementation
 
-We implemented a generic solver for kernel GLMs in Python, using the Fisher scoring method. The code for the solver, and the two experiments, are available at the GitHub link provided. 
+We implemented a generic solver for kernel ridge GLMs (KRGLM) in Python, using the Fisher scoring method.
 
 #### KRGLM via Fisher Scoring in Function Space
 
