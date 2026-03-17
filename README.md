@@ -8,24 +8,30 @@ To demonstrate the challenge of covariate shift and how our pseudo-labeling meth
 
 **The Setup:**
 * **Feature space:** $[0,1]$.
-* **Response model:** Logistic regression (binary classification), where $y \mid x \sim \text{Bernoulli}(\sigma(f^*(x)))$ with the true latent function $f^*(x) = 1.5\cos(2\pi x)$ and $\sigma$ the sigmoid function.
-* **Kernel:** First-order Sobolev kernel, $K(z,w) = \min(z,w)$.
+* **Sample sizes:** $n = 4000$ labeled source samples and $n_0 = n$ unlabeled target samples.
+* **Response model:** Kernel logistic regression, where $y \mid x \sim \text{Bernoulli}(\sigma(f^*(x)))$ with the true latent function $f^*(x) = 1.5\cos(2\pi x)$, and $\sigma$ the sigmoid function.
 * **Source covariate distribution ($\mathcal{P}$):** Concentrated on the left, $\frac{B}{B+1}\mathcal{U}[0, 1/2] + \frac{1}{B+1}\mathcal{U}[1/2, 1]$ with $B=n^{0.45}$.
 * **Target covariate distribution ($\mathcal{Q}$):** Concentrated on the right, $\frac{1}{B+1}\mathcal{U}[0, 1/2] + \frac{B}{B+1}\mathcal{U}[1/2, 1]$ with $B=n^{0.45}$.
-* **Sample sizes:** $n = 4000$ labeled source samples and $n_0 = n$ unlabeled target samples.
+* **Kernel:** First-order Sobolev kernel, $K(z,w) = \min(z,w)$.
 
-We split the labeled source data in half. On the first half, we run kernel logistic regression with a grid of different ridge penalty parameters ($\lambda$) to obtain a collection of candidate models. On the second half, we fit an undersmoothed imputation model ($\lambda = 10^{-4}$) to generate soft pseudo-labels for the target data. 
+We split the labeled source data in half. On the first half, we run kernel logistic regression with a grid of different ridge penalty parameters ($\lambda$) to obtain a collection of candidate models. 
+
+First, we note the necessity of adapting to covariate shift. On the left panel below, we plotted three candidate models with different penalties. We see that the optimal choice is different for the source and target distributions. On the interval $[0, 1/2]$ where source data is abundant, a large penalty (cyan) provides a great fit. However, on the interval $[1/2, 1]$ where source data is sparse but target data is heavily concentrated, this large penalty oversmooths, and a smaller penalty (red) actually performs better for the target domain.
+
+Then on the right panel below, we compare three model selections methods based on different validation datasets:
+to minimize the target excess risk. 
+* **Naive method (blue)**: validating on the held-out source data, it selects a suboptimal model that fails to adapt to the target distribution.
+* **Oracle method (cyan)**: uses true, noiseless target responses.
+* **Proposed method (red)**: using only the unlabeled target data with our generated soft pseudo-labels, it successfully selects an adaptive model, achieving performance highly comparable to the oracle.
+*(Note: The imputation model used to generate the pseudo-labels is shown in pink; while unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
 
 <p align="center">
   <img src="target_source_opt.png" width="48%" alt="Candidate Models">
   <img src="pseudo_oracle_naive.png" width="48%" alt="Selection Methods">
   <br>
-  <em>Figure 1: Covariate shift and its adaptation in Kernel Logistic Regression. The black dashed curves and gray dots show the true latent function $f^*$ and the source data.</em>
+  <em>Figure 1: Covariate shift and its adaptation in kernel logistic regression. The black dashed curves and gray dots show the true latent function $f^*$ and the source data.</em>
 </p>
 
-**Visualizing the Results:**
-* **Left Panel (The Candidates):** We compare three candidate models. On the interval $[0, 1/2]$ where source data is abundant, a medium penalty (blue) provides a great fit. However, on the interval $[1/2, 1]$ where source data is sparse but target data is heavily concentrated, this medium penalty oversmooths, and a smaller penalty (red) actually performs better for the target domain.
-* **Right Panel (The Selection):** We compare three model selection methods. Validating on the held-out source data (**Naive method, blue**) selects a suboptimal model that fails to adapt to the target distribution. In contrast, using the target data with our generated soft pseudo-labels (**Proposed method, red**) successfully selects an adaptive model, achieving performance highly comparable to the **Oracle method (cyan)** that uses true, noiseless target responses. *(Note: The imputation model used to generate the pseudo-labels is shown in pink; while unsuitable for direct prediction, it is highly effective for relative model ranking).*
 
 ## 🧮 Algorithmic Details
 We implemented a generic solver for kernel GLMs in Python, using the Fisher scoring method. For full mathematical details and notes on our scalable GPU implementation with KeOps, please see our [Algorithmic Details document](ALGORITHM.md).
