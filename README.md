@@ -32,6 +32,14 @@ Then on the right panel below, we compare three model selections methods based o
 
 *(Note: We also visualize the imputation model used to generate the pseudo-labels, shown in pink. While unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
 
+For full reproducible details—including the exact grid of hyperparameters and the specific $\lambda$ penalties selected by each method—please refer directly to the `demo_covariate_shift.ipynb` notebook. The final quantitative performance of the selected models is summarized below:
+
+| Method | Target Excess Risk | 95% condidence interval |
+| :--- | :--- | :--- |
+| **Naive** | 0.016300 | [0.014926, 0.017674] |
+| **Pseudo-labeling (Ours)** | **0.003481** | **[0.001954, 0.005008]** |
+| **Oracle** | 0.002855 | [0.001312, 0.004399] |
+
 
 ## 🧮 Algorithmic Details
 We implemented a generic solver for kernel GLMs in Python, using the Fisher scoring method. For full mathematical details and notes on our scalable GPU implementation with KeOps, please see our [Algorithmic Details document](ALGORITHM.md).
