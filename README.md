@@ -19,19 +19,18 @@ We split the labeled source data in half. On the first half, we run kernel logis
 First, we note the necessity of adapting to covariate shift. On the left panel below, we plotted three candidate models with different penalties. We see that the optimal choice is different for the source and target distributions. On the interval $[0, 1/2]$ where source data is abundant, a large penalty (cyan) provides a great fit. However, on the interval $[1/2, 1]$ where source data is sparse but target data is heavily concentrated, this large penalty oversmooths, and a smaller penalty (red) actually performs better for the target domain.
 
 Then on the right panel below, we compare three model selections methods based on different validation datasets:
-to minimize the target excess risk. 
 * **Naive method (blue)**: validating on the held-out source data, it selects a suboptimal model that fails to adapt to the target distribution.
 * **Oracle method (cyan)**: uses true, noiseless target responses.
 * **Proposed method (red)**: using only the unlabeled target data with our generated soft pseudo-labels, it successfully selects an adaptive model, achieving performance highly comparable to the oracle.
 
-*(Note: We also visualize the imputation model used to generate the pseudo-labels, shown in pink. While unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
-
 <p align="center">
   <img src="target_source_opt.png" width="48%" alt="Candidate Models">
   <img src="pseudo_oracle_naive.png" width="48%" alt="Selection Methods">
-  <br>
-  <em>Figure 1: Covariate shift and its adaptation in kernel logistic regression. The black dashed curves and gray dots show the true latent function $f^\ast$ and the source data.</em>
 </p>
+
+*Figure 1: Covariate shift and its adaptation in Kernel Logistic Regression. The black dashed curves and gray dots show the true latent function* $f^\ast(x)$ *and the source data.*
+
+*(Note: We also visualize the imputation model used to generate the pseudo-labels, shown in pink. While unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
 
 
 ## 🧮 Algorithmic Details
