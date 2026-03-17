@@ -9,7 +9,7 @@ To demonstrate the challenge of covariate shift and how our pseudo-labeling meth
 **The Setup:**
 * **Feature space:** $[0,1]$.
 * **Sample sizes:** $n = 4000$ labeled source samples and $n_0 = n$ unlabeled target samples.
-* **Response model:** Kernel logistic regression, where $y \mid x \sim \text{Bernoulli}(\sigma(f^*(x)))$ with the true latent function $f^*(x) = 1.5\cos(2\pi x)$, and $\sigma$ the sigmoid function.
+* **Response model:** Kernel logistic regression, where $y \mid x \sim \text{Bernoulli}(\sigma(f^\ast(x)))$ with the true latent function $f^\ast(x) = 1.5\cos(2\pi x)$, and $\sigma$ the sigmoid function.
 * **Source covariate distribution ($\mathcal{P}$):** Concentrated on the left, $\frac{B}{B+1}\mathcal{U}[0, 1/2] + \frac{1}{B+1}\mathcal{U}[1/2, 1]$ with $B=n^{0.45}$.
 * **Target covariate distribution ($\mathcal{Q}$):** Concentrated on the right, $\frac{1}{B+1}\mathcal{U}[0, 1/2] + \frac{B}{B+1}\mathcal{U}[1/2, 1]$ with $B=n^{0.45}$.
 * **Kernel:** First-order Sobolev kernel, $K(z,w) = \min(z,w)$.
@@ -23,13 +23,14 @@ to minimize the target excess risk.
 * **Naive method (blue)**: validating on the held-out source data, it selects a suboptimal model that fails to adapt to the target distribution.
 * **Oracle method (cyan)**: uses true, noiseless target responses.
 * **Proposed method (red)**: using only the unlabeled target data with our generated soft pseudo-labels, it successfully selects an adaptive model, achieving performance highly comparable to the oracle.
-*(Note: The imputation model used to generate the pseudo-labels is shown in pink; while unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
+
+*(Note: We also visualize the imputation model used to generate the pseudo-labels, shown in pink. While unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
 
 <p align="center">
   <img src="target_source_opt.png" width="48%" alt="Candidate Models">
   <img src="pseudo_oracle_naive.png" width="48%" alt="Selection Methods">
   <br>
-  <em>Figure 1: Covariate shift and its adaptation in kernel logistic regression. The black dashed curves and gray dots show the true latent function $f^*$ and the source data.</em>
+  <em>Figure 1: Covariate shift and its adaptation in kernel logistic regression. The black dashed curves and gray dots show the true latent function $f^\ast$ and the source data.</em>
 </p>
 
 
