@@ -25,7 +25,7 @@ Then on the right panel below, we compare three model selections methods based o
 
 <p align="center">
   <img src="target_source_opt.png" width="48%" alt="Candidate Models">
-  <img src="pseudo_oracle_naive.png" width="48%" alt="Selection Methods">
+  <img src="pseudo_oracle_naive_demo.png" width="48%" alt="Selection Methods">
 </p>
 
 *Figure 1: Covariate shift and its adaptation in Kernel Logistic Regression. The black dashed curves and gray dots show the true latent function* $f^\ast(x)$ *and the source data.*
