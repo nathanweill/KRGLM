@@ -24,8 +24,8 @@ Then on the right panel below, we compare three model selections methods based o
 * **Proposed method (red)**: using only the unlabeled target data with our generated soft pseudo-labels, it successfully selects an adaptive model, achieving performance highly comparable to the oracle.
 
 <p align="center">
-  <img src="target_source_opt.png" width="48%" alt="Candidate Models">
-  <img src="pseudo_oracle_naive_demo.png" width="48%" alt="Selection Methods">
+  <img src="target_source_medium.png" width="48%" alt="Candidate Models">
+  <img src="pseudo_oracle_naive_imp.png" width="48%" alt="Selection Methods">
 </p>
 
 *Figure 1: Covariate shift and its adaptation in Kernel Logistic Regression. The black dashed curves show the true latent function* $f^\ast(x)$ *.*
