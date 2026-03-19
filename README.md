@@ -37,7 +37,7 @@ For full reproducible details—including the exact grid of hyperparameters and 
 | Method | Target Excess Risk | 95% condidence interval |
 | :--- | :--- | :--- |
 | **Naive** | 0.016300 | [0.014926, 0.017674] |
-| **Pseudo-labeling (Ours)** | **0.003481** | **[0.001954, 0.005008]** |
+| **Pseudo-labeling (Ours)** | 0.003481 | [0.001954, 0.005008] |
 | **Oracle** | 0.002855 | [0.001312, 0.004399] |
 
 
