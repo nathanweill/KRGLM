@@ -28,7 +28,7 @@ Then on the right panel below, we compare three model selections methods based o
   <img src="pseudo_oracle_naive_demo.png" width="48%" alt="Selection Methods">
 </p>
 
-*Figure 1: Covariate shift and its adaptation in Kernel Logistic Regression. The black dashed curves and gray dots show the true latent function* $f^\ast(x)$ *and the source data.*
+*Figure 1: Covariate shift and its adaptation in Kernel Logistic Regression. The black dashed curves show the true latent function* $f^\ast(x)$ *.*
 
 *(Note: We also visualize the imputation model used to generate the pseudo-labels, shown in pink. While unsuitable for direct prediction, it is effective for model selection with pseudo-labels).*
 
