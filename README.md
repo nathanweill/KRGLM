@@ -66,5 +66,14 @@ We evaluate our method on the Raisin dataset.
 
 ## 📝 Citation
 If you use this code in your research, please cite our paper:
-
+```bibtex
+@misc{weill2026pseudolabelingunsuperviseddomainadaptation,
+      title={Pseudo-Labeling for Unsupervised Domain Adaptation with Kernel GLMs}, 
+      author={Nathan Weill and Kaizheng Wang},
+      year={2026},
+      eprint={2603.19422},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML},
+      url={https://arxiv.org/abs/2603.19422}, 
+}
 
